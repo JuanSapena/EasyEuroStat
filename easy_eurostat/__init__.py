@@ -43,7 +43,7 @@ def download_url(url, filename, binary=False, unzip=False):
             f.write(file_content)
     except Exception as e:
         print(e)
-        
+       
         
 def get_eurostat_dictionary(dictionary, inverse=False):
     '''
@@ -53,9 +53,11 @@ def get_eurostat_dictionary(dictionary, inverse=False):
     :return: A Python dictionary with the key -> value pair
     '''
     dictionary = dictionary.lower()
-    url = "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&downfile=dic%2Fen%2F" +\
-          dictionary + ".dic"
-    filename = os.path.join("cache", dictionary + ".dic")
+    #url = "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&downfile=dic%2Fen%2F" +\
+          #dictionary + ".dic"
+    url = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/codelist/ESTAT/" + dictionary + "/latest?format=TSV&lang=en"
+
+    filename = os.path.join(dictionary + ".tsv")
     download_url(url, filename)
 
     try:
@@ -88,15 +90,16 @@ def get_eurostat_dataset(dataset, replace_codes=True, transpose=True, keep_codes
     :return: A Python dictionary with the key -> value pair
     '''
     dataset = dataset.lower()
-    filename = os.path.join("cache", dataset + ".tsv")
-    url = "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=data/" + \
-          dataset + ".tsv.gz"
+    filename = os.path.join("estat_" + dataset + ".tsv")
+    #url = "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=data/" + \
+          #dataset + ".tsv.gz"
+    url = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/" + dataset + "/?format=TSV&compressed=true"
     download_url(url, filename, unzip=True)
     
     df = pd.read_csv(filename, sep=",|\t| [^ ]?\t", na_values=":", engine="python")
     df.columns = [x.split('\\')[0].strip(' ') for x in df.columns]
     # Now get the dictionary columns
-    with open(os.path.join("cache", dataset + ".tsv")) as f:
+    with open(os.path.join("estat_" + dataset + ".tsv")) as f:
         first_line = f.readline()
     codes = first_line.split('\t')[0].split('\\')[0].split(',')
     # Replace codes with value
