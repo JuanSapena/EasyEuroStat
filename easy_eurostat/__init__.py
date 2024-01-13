@@ -6,6 +6,15 @@ import pandas as pd
 import geopandas as gpd
 import urllib.request
 
+dirname = os.path.dirname(__file__)
+dirname
+path = './cache2'
+
+# create new single directory
+#os.mkdir(path)
+
+cache = dirname + "\cache2"
+
 def file_age(filename):
     '''
     Return the age of the given file in hours
@@ -14,6 +23,7 @@ def file_age(filename):
     :rtype: int
     
     '''
+       
     if os.path.exists(filename):
         return int((time.time() - os.path.getmtime(filename)) / 3600)
     else:
@@ -27,6 +37,7 @@ def download_url(url, filename, binary=False, unzip=False):
     :param str url: The URL to download
     :param str filename: The filename to save the file under
     '''
+        
     if os.path.exists(filename) and file_age(filename) < 24:
         # Cached version exists and is less than a day old
         return
@@ -57,7 +68,7 @@ def get_eurostat_dictionary(dictionary, inverse=False):
           #dictionary + ".dic"
     url = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/codelist/ESTAT/" + dictionary + "/latest?format=TSV&lang=en"
 
-    filename = os.path.join(dictionary + ".tsv")
+    filename = os.path.join('cache', dictionary + ".tsv")
     download_url(url, filename)
 
     try:
@@ -90,7 +101,7 @@ def get_eurostat_dataset(dataset, replace_codes=True, transpose=True, keep_codes
     :return: A Python dictionary with the key -> value pair
     '''
     dataset = dataset.lower()
-    filename = os.path.join("estat_" + dataset + ".tsv")
+    filename = os.path.join('cache', "estat_" + dataset + ".tsv")
     #url = "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=data/" + \
           #dataset + ".tsv.gz"
     url = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/" + dataset + "/?format=TSV&compressed=true"
@@ -99,7 +110,7 @@ def get_eurostat_dataset(dataset, replace_codes=True, transpose=True, keep_codes
     df = pd.read_csv(filename, sep=",|\t| [^ ]?\t", na_values=":", engine="python")
     df.columns = [x.split('\\')[0].strip(' ') for x in df.columns]
     # Now get the dictionary columns
-    with open(os.path.join("estat_" + dataset + ".tsv")) as f:
+    with open(os.path.join('cache', "estat_" + dataset + ".tsv")) as f:
         first_line = f.readline()
     codes = first_line.split('\t')[0].split('\\')[0].split(',')
     # Replace codes with value
