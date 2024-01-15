@@ -93,7 +93,6 @@ def get_eurostat_dictionary(dictionary, inverse=False):
     except:
         return {}
 
-
 def get_eurostat_dataset(dataset, replace_codes=True, transpose=True, keep_codes=[]):
     '''
     Return a dataset from Eurostat.
