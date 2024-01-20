@@ -578,6 +578,9 @@ PC_IND_BRA	Percentage of individuals who rented accommodation online from an ent
 PC_IND_BTPS	Percentage of individuals who purchased online transport service from a transport enterprise or a private person
 PC_IND_IOT_BDKX	Percentage of individuals who have not used any internet-connected device or systems although they knew about them
 PC_IND_IOT_DX	Percentage of individuals who have not used any internet-connected devices or systems
+PC_IND_HM	Percentage of individuals who encountered messages online that were considered to be hostile or degrading towards groups of people or individuals in the last 3 months
+PC_IND_IEID	Percentage of individuals who have used their electronic identification to access online services for private purpose in the last 12 months
+PC_IND_IEIDX	Percentage of individuals who have not used their electronic identification to access online services for private purpose in the last 12 months
 PC_VAL_ISELL	Percentage of internet sales
 PC_HH_IACCX	Percentage of households without internet access at home
 PC_HH_BROADX	Percentage of households without broadband access
